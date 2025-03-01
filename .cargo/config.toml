@@ -1,0 +1,25 @@
+# copied from https://github.com/srcwr/srcwrtimer/blob/main/.cargo/config.toml
+
+[build]
+target-dir = "_build"
+
+# FUCK YOU TO PEOPLE WITH OLD CPUS
+rustflags = ["-Ctarget-cpu=x86-64-v2"]
+
+target = "x86_64-pc-windows-msvc"
+
+[env]
+CFLAGS_x86_64_pc_windows_msvc = "/Zi /FS"
+CXXFLAGS_x86_64_pc_windows_msvc = "/Zi /FS"
+
+SRCWRTIMER_ROOT_DIR = { value = "../srcwrtimer", relative = true }
+
+[target.x86_64-pc-windows-msvc]
+rustflags = [
+	# FUCK YOU TO PEOPLE WITH OLD CPUS
+	"-Ctarget-cpu=x86-64-v2",
+	# TODO: Do we want static crt on Windows? I can't remember if there was a reason for this...
+	"-Ctarget-feature=+crt-static",
+	# Yeah, we want frame pointers...
+	"-Cforce-frame-pointers=yes",
+]
