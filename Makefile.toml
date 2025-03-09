@@ -1,3 +1,37 @@
 extend = "../srcwrtimer/Makefile.toml"
 [env]
 SRCWRTIMER_ROOT_DIR="${CARGO_MAKE_WORKING_DIRECTORY}/../srcwrtimer"
+TARGETARCH = "x86_64" # we only support x64 for wasm for performance & codegen reasons
+
+
+[tasks.wasi]
+dependencies = [
+	"rustup-wasi",
+	#"build-wasi",
+	"copy-wasi",
+]
+
+
+[tasks.rustup-wasi]
+toolchain = "nightly"
+command = "rustup"
+args = ["target", "add", "wasm32-wasip2"]
+
+
+#[tasks.build-wasi]
+#toolchain = "nightly"
+#command = "cargo"
+#args = ["build", "--release", "--manifest-path", "wasi-example/Cargo.toml"]
+
+
+[tasks.copy-wasi]
+script_runner = "@duckscript"
+script = '''
+fn do_everything
+	pluginsdir = set "${PACKAGEDIR}/srcwrtimer/addons/sourcemod/data/wasm/plugins"
+	mkdir "${pluginsdir}"
+	rm "${pluginsdir}/wasi-example.wasm"
+	cp "${CARGO_MAKE_WORKING_DIRECTORY}/_build/wasm32-wasip2/release/wasi-example.wasm" "${pluginsdir}/wasi-example.wasm"
+end
+do_everything
+'''

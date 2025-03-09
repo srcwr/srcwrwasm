@@ -15,4 +15,8 @@ crate-type = ["cdylib"]
 extshared_build_helper.workspace = true
 
 [dependencies]
+anyhow = "1"
 extshared.workspace = true
+mimalloc = { version = "*", default-features = false }
+wasmtime = "30.0.2"
+wasmtime-wasi = "30.0.2"

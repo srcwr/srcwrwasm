@@ -6,7 +6,8 @@
 
 
 methodmap SRCWRWASM < Handle {
-	public native SRCWRWASM();
+	public native SRCWRWASM(const char[] path, bool wasi);
+	public native bool RunInBackground(const char[][] argv={}, int argc=0);
 }
 
 
