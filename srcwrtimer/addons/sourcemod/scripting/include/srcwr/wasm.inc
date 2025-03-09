@@ -5,9 +5,23 @@
 #pragma semicolon 1
 
 
-methodmap SRCWRWASM < Handle {
-	public native SRCWRWASM(const char[] path, bool wasi);
-	public native bool RunInBackground(const char[][] argv={}, int argc=0);
+methodmap WasmModule < Handle {
+	public native WasmModule(const char[] path);
+
+	public native WasmInstance Instantiate(bool enable_wasi);
+}
+
+methodmap WasmInstance < Handle {
+	public native void RunInBackground();
+	public native void Stop();
+
+	///// WASI only methods:
+	//
+	public native void args(const char[][] argv={}, int argc=0);
+	// Inherit environment variables from SRCDS.
+	public native void inherit_env();
+	//
+	//public native void set_env(const char[] key, const char[] fmt, ...);
 }
 
 
@@ -30,6 +44,12 @@ public Extension __ext_srcwrwasm =
 #if !defined REQUIRE_EXTENSIONS
 public void __ext_srcwrwasm_SetNTVOptional()
 {
-	MarkNativeAsOptional("SRCWRWASM.SRCWRWASM");
+	MarkNativeAsOptional("WasmModule.WasmModule");
+	MarkNativeAsOptional("WasmModule.Instantiate");
+
+	MarkNativeAsOptional("WasmInstance.RunInBackground");
+	MarkNativeAsOptional("WasmInstance.Stop");
+	MarkNativeAsOptional("WasmInstance.args");
+	MarkNativeAsOptional("WasmInstance.inherit_env");
 }
 #endif
